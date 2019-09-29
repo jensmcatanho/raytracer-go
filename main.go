@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"jensmcatanho/raytracer-go/math"
+)
 
 func main() {
-	fmt.Println("Raytracer Go!")
+	origin := math.NewVector(0., 0., 0.)
+	fmt.Println(fmt.Sprintf("Raytracer Go!\nOrigin: %+v", origin))
 }
