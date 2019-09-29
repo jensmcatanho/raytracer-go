@@ -1,6 +1,6 @@
 package math
 
-// Vector is an abstraction of a 3D vector
+// Vector is a structure that represents a 3D vector
 type Vector struct {
 	x, y, z float64
 }
