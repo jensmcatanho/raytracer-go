@@ -14,10 +14,10 @@ func Test_NewSurface_WhenANewSurfaceIsCreated(t *testing.T) {
 
 	surface := NewSurface(*color, hit, *hitPoint, *normal)
 
-	assert.Equal(t, *color, surface.Color)
+	assert.Equal(t, color, surface.Color)
 	assert.Equal(t, hit, surface.Hit)
-	assert.Equal(t, *hitPoint, surface.HitPoint)
-	assert.Equal(t, *normal, surface.Normal)
+	assert.Equal(t, hitPoint, surface.HitPoint)
+	assert.Equal(t, normal, surface.Normal)
 }
 
 func Test_NewSurface_WhenNoSurfaceWasHit(t *testing.T) {
