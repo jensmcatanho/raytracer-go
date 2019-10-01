@@ -1,47 +1,65 @@
 package math
 
+import (
+	stdMath "math"
+)
+
 // Vector is a structure that represents a 3D vector
 type Vector struct {
-	x, y, z float64
+	X, Y, Z float64
 }
 
 // NewVector creates a Vector structure
 func NewVector(x, y, z float64) *Vector {
 	return &Vector{
-		x: x,
-		y: y,
-		z: z,
+		X: x,
+		Y: y,
+		Z: z,
 	}
 }
 
 // Add adds two vectors and returns a new Vector with the result
 func (v *Vector) Add(w *Vector) *Vector {
 	return &Vector{
-		x: v.x + w.x,
-		y: v.y + w.y,
-		z: v.z + w.z,
+		X: v.X + w.X,
+		Y: v.Y + w.Y,
+		Z: v.Z + w.Z,
 	}
 }
 
 // Sub subtracts two vectors and returns a new Vector with the result
 func (v *Vector) Sub(w *Vector) *Vector {
 	return &Vector{
-		x: v.x - w.x,
-		y: v.y - w.y,
-		z: v.z - w.z,
+		X: v.X - w.X,
+		Y: v.Y - w.Y,
+		Z: v.Z - w.Z,
 	}
 }
 
 // Multiply multiplies a Vector by a constant and returns a new Vector with the result
 func (v *Vector) Multiply(k float64) *Vector {
 	return &Vector{
-		x: v.x * k,
-		y: v.y * k,
-		z: v.z * k,
+		X: v.X * k,
+		Y: v.Y * k,
+		Z: v.Z * k,
 	}
 }
 
 // Dot calculates the dot product between two Vectors
 func (v *Vector) Dot(w *Vector) float64 {
-	return v.x*w.x + v.y*w.y + v.z*w.z
+	return v.X*w.X + v.Y*w.Y + v.Z*w.Z
+}
+
+// Length returns the length of the Vector
+func (v *Vector) Length() float64 {
+	return stdMath.Sqrt(stdMath.Pow(v.X, 2) + stdMath.Pow(v.Y, 2) + stdMath.Pow(v.Z, 2))
+}
+
+// Normalize normalizes the Vector
+func (v *Vector) Normalize() {
+	norm := v.Length()
+
+	v.X = v.X / norm
+	v.Y = v.Y / norm
+	v.Z = v.Z / norm
 }
