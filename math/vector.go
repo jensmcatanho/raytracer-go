@@ -63,3 +63,14 @@ func (v *Vector) Normalize() {
 	v.Y = v.Y / norm
 	v.Z = v.Z / norm
 }
+
+// Cross calculates the cross product between two Vectors
+func (v *Vector) Cross(w *Vector) *Vector {
+	crossProduct := NewVector(0., 0., 0.)
+
+	crossProduct.X = v.Y*w.Z - v.Z*w.Y
+	crossProduct.Y = v.X*w.Z - v.Z*w.X
+	crossProduct.Z = v.X*w.Y - v.Y*w.X
+
+	return crossProduct
+}

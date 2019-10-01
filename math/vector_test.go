@@ -98,7 +98,7 @@ func Test_Length(t *testing.T) {
 	assert.Equal(t, true, err)
 }
 
-func Test_Normalization(t *testing.T) {
+func Test_Normalize(t *testing.T) {
 	v := NewVector(math.Sqrt(3), math.Sqrt(3), math.Sqrt(3))
 
 	v.Normalize()
@@ -107,4 +107,15 @@ func Test_Normalization(t *testing.T) {
 		math.Abs(math.Sqrt(3)/3-v.Z) <= epsilon
 
 	assert.Equal(t, true, err)
+}
+
+func Test_Cross(t *testing.T) {
+	v := NewVector(1., 0., 0.)
+	w := NewVector(0., 0., 1.)
+
+	result := v.Cross(w)
+
+	assert.Equal(t, 0., result.X)
+	assert.Equal(t, 1., result.Y)
+	assert.Equal(t, 0., result.Z)
 }
