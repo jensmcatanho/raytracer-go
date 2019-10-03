@@ -13,6 +13,7 @@ const (
 type Sphere struct {
 	Center math.Vector
 	Radius float64
+	Color  math.Color
 }
 
 // NewSphere creates a Sphere structure
@@ -56,10 +57,9 @@ func (s *Sphere) Hit(ray math.Ray, closestDistance *float64) *math.Surface {
 }
 
 func (s *Sphere) hitSurface(ray math.Ray, distance float64, originToCenter *math.Vector) *math.Surface {
-	color := math.NewColor(1., 1., 1.)
 	hitPoint := ray.Origin.Add(ray.Direction.Multiply(distance))
 	normal := originToCenter.Add(ray.Direction.Multiply(distance))
 	normal = normal.Multiply(1. / s.Radius)
 
-	return math.NewSurface(*color, true, *hitPoint, *normal)
+	return math.NewSurface(s.Color, true, *hitPoint, *normal)
 }
