@@ -3,6 +3,7 @@ package camera
 import (
 	"errors"
 	"fmt"
+	"image"
 	"jensmcatanho/raytracer-go/math"
 )
 
@@ -17,7 +18,7 @@ type ProjectionPlane struct {
 	ClampOutOfGamut bool
 	ClampColor      math.Color
 
-	Pixels [][]math.Color
+	Image image.RGBA
 }
 
 // NewProjectionPlane creates a ProjectionPlane structure
@@ -32,11 +33,7 @@ func NewProjectionPlane(args ...interface{}) (*ProjectionPlane, error) {
 		Gamma:           1.0,
 		ClampOutOfGamut: false,
 		ClampColor:      *math.NewColor(0., 0., 0.),
-	}
-
-	projectionPlane.Pixels = make([][]math.Color, height)
-	for i := range projectionPlane.Pixels {
-		projectionPlane.Pixels[i] = make([]math.Color, width)
+		Image:           *image.NewRGBA(image.Rect(0, 0, width, height)),
 	}
 
 	return projectionPlane, err
@@ -108,5 +105,5 @@ func (p *ProjectionPlane) SetPixel(row, col int, rawColor math.Color) {
 		mappedColor = *mappedColor.Pow(1 / p.Gamma)
 	}
 
-	p.Pixels[row][col] = mappedColor
+	p.Image.Set(row, col, mappedColor.ToRGBA())
 }

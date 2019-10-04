@@ -1,8 +1,11 @@
 package camera
 
 import (
+	"image/png"
 	"jensmcatanho/raytracer-go/math"
 	"jensmcatanho/raytracer-go/tracer"
+	"log"
+	"os"
 )
 
 // Pinhole is a camera that renders a scene with a perspective projection
@@ -34,15 +37,17 @@ func (p *Pinhole) RenderScene() {
 
 	for row := 0; row < p.ProjectionPlane.Height; row++ {
 		for col := 0; col < p.ProjectionPlane.Width; col++ {
-			var pixelColor math.Color
+			pixelColor := *math.NewColor(0., 0., 0.)
 			samplePoint := math.NewVector(pixelSize*.5, pixelSize*.5, .0)
-			ray.Direction = p.RayDirection(*samplePoint)
+			ray.Direction = p.RayDirection(*math.NewVector(
+				pixelSize*(float64(col)-0.5*float64(p.ProjectionPlane.Width)+samplePoint.X),
+				pixelSize*(float64(row)-0.5*float64(p.ProjectionPlane.Height)+samplePoint.Y),
+				0.,
+			))
 
 			surface := p.Tracer.TraceRay(*ray)
-			if surface.Hit {
-				pixelColor = *surface.Color
-			} else {
-				pixelColor = *math.NewColor(0., 0., 0.)
+			if surface != nil && surface.Hit {
+				pixelColor = *pixelColor.Add(surface.Color)
 			}
 
 			pixelColor = *pixelColor.Multiply(p.Exposure)
@@ -84,4 +89,21 @@ func (p *Pinhole) RayDirection(samplePoint math.Vector) math.Vector {
 	direction.Normalize()
 
 	return *direction
+}
+
+// SaveImage saves a png image of the rendered scene
+func (p *Pinhole) SaveImage() {
+	file, err := os.Create("image.png")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := png.Encode(file, &p.ProjectionPlane.Image); err != nil {
+		file.Close()
+		log.Fatal(err)
+	}
+
+	if err := file.Close(); err != nil {
+		log.Fatal(err)
+	}
 }

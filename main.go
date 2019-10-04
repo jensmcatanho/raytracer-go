@@ -17,10 +17,11 @@ func main() {
 	}
 
 	sphereCenter := math.NewVector(0., 0., 10.)
-	sphere := object.NewSphere(*sphereCenter, 2)
+	sphere := object.NewSphere(*sphereCenter, 8)
+	sphere.Color = *math.NewColor(1., 0., 0.)
 	scene.GetInstance().AddObject(sphere)
 
-	projectionPlane, err := camera.NewProjectionPlane(200, 200, 1., 500.)
+	projectionPlane, err := camera.NewProjectionPlane(1000, 1000, 1., 100.)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error on projection plane creation: %s", err))
 	}
@@ -33,6 +34,7 @@ func main() {
 	camera.Zoom = 1
 	camera.Tracer = new(tracer.RayCast)
 	camera.RenderScene()
+	camera.SaveImage()
 
 	fmt.Println(fmt.Sprintf("Raytracer Go!\nScene: %+v", scene.GetInstance()))
 }

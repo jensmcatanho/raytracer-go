@@ -10,4 +10,5 @@ var (
 type Camera interface {
 	RenderScene()
 	RayDirection(samplePoint math.Vector) math.Vector
+	SaveImage()
 }
