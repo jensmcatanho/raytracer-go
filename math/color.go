@@ -1,6 +1,9 @@
 package math
 
-import stdMath "math"
+import (
+	"image/color"
+	stdMath "math"
+)
 
 // Color is a structure that represents an RGB color
 type Color struct {
@@ -13,6 +16,15 @@ func NewColor(r, g, b float64) *Color {
 		r: r,
 		g: g,
 		b: b,
+	}
+}
+
+// Add adds two colors and returns a new color with the result
+func (c *Color) Add(d *Color) *Color {
+	return &Color{
+		r: c.r + d.r,
+		g: c.g + d.g,
+		b: c.b + d.b,
 	}
 }
 
@@ -48,5 +60,15 @@ func (c *Color) MaxToOne() {
 		c.r /= max
 		c.g /= max
 		c.b /= max
+	}
+}
+
+// ToRGBA converts float64 color fields to uint8
+func (c *Color) ToRGBA() *color.RGBA {
+	return &color.RGBA{
+		R: uint8(c.r * 255),
+		G: uint8(c.g * 255),
+		B: uint8(c.b * 255),
+		A: 255,
 	}
 }
