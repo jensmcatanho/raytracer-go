@@ -3,6 +3,7 @@ package camera
 import (
 	"image/png"
 	"jensmcatanho/raytracer-go/math"
+	"jensmcatanho/raytracer-go/sampler"
 	"jensmcatanho/raytracer-go/tracer"
 	"log"
 	"os"
@@ -26,6 +27,7 @@ type Pinhole struct {
 
 	ProjectionPlane ProjectionPlane
 	Tracer          tracer.Tracer
+	Sampler         sampler.Sampler
 }
 
 // RenderScene traces a ray for every pixel in the target image and sets the pixel color with the color of the object hit

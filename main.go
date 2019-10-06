@@ -5,6 +5,7 @@ import (
 	"jensmcatanho/raytracer-go/camera"
 	"jensmcatanho/raytracer-go/math"
 	"jensmcatanho/raytracer-go/object"
+	"jensmcatanho/raytracer-go/sampler"
 	"jensmcatanho/raytracer-go/scene"
 	"jensmcatanho/raytracer-go/tracer"
 )
@@ -26,8 +27,14 @@ func main() {
 		fmt.Println(fmt.Sprintf("Error on projection plane creation: %s", err))
 	}
 
+	sampler, err := sampler.NewSampler(16)
+	if err != nil {
+		fmt.Println(fmt.Sprintf("Error on sampler creation: %s", err))
+	}
+
 	camera := new(camera.Pinhole)
 	camera.ProjectionPlane = *projectionPlane
+	camera.Sampler = *sampler
 	camera.Eye = math.NewVector(.0, .0, .0)
 	camera.LookAt = math.NewVector(.0, .0, 1.)
 	camera.Exposure = 1
