@@ -40,19 +40,22 @@ func (p *Pinhole) RenderScene() {
 	for row := 0; row < p.ProjectionPlane.Height; row++ {
 		for col := 0; col < p.ProjectionPlane.Width; col++ {
 			pixelColor := *math.NewColor(0., 0., 0.)
-			samplePoint := math.NewVector(pixelSize*.5, pixelSize*.5, .0)
-			ray.Direction = p.RayDirection(*math.NewVector(
-				pixelSize*(float64(col)-0.5*float64(p.ProjectionPlane.Width)+samplePoint.X),
-				pixelSize*(float64(row)-0.5*float64(p.ProjectionPlane.Height)+samplePoint.Y),
-				0.,
-			))
 
-			surface := p.Tracer.TraceRay(*ray)
-			if surface != nil && surface.Hit {
-				pixelColor = *pixelColor.Add(surface.Color)
+			for sample := 0; sample < p.Sampler.Samples; sample++ {
+				samplePoint := p.Sampler.SampleUnitSquare()
+				ray.Direction = p.RayDirection(*math.NewVector(
+					pixelSize*(float64(col)-0.5*float64(p.ProjectionPlane.Width)+samplePoint.X),
+					pixelSize*(float64(row)-0.5*float64(p.ProjectionPlane.Height)+samplePoint.Y),
+					0.,
+				))
+
+				surface := p.Tracer.TraceRay(*ray)
+				if surface != nil && surface.Hit {
+					pixelColor = *pixelColor.Add(surface.Color)
+				}
 			}
 
-			pixelColor = *pixelColor.Multiply(p.Exposure)
+			pixelColor = *pixelColor.Multiply(p.Exposure / float64(p.Sampler.Samples))
 			p.ProjectionPlane.SetPixel(row, col, pixelColor)
 		}
 	}

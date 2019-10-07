@@ -27,10 +27,11 @@ func main() {
 		fmt.Println(fmt.Sprintf("Error on projection plane creation: %s", err))
 	}
 
-	sampler, err := sampler.NewSampler(16)
+	sampler, err := sampler.NewSampler(4)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error on sampler creation: %s", err))
 	}
+	sampler.Sample()
 
 	camera := new(camera.Pinhole)
 	camera.ProjectionPlane = *projectionPlane
