@@ -123,3 +123,29 @@ func Random(numSamples, numSets int, samples *[]math.Vector) {
 		}
 	}
 }
+
+// Hammersley generates sample using Hammersley points
+// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
+func Hammersley(numSamples, numSets int, samples *[]math.Vector) {
+	phi := func(j int) float64 {
+		x := 0.
+		f := .5
+
+		for j > 0 {
+			x += f * float64(j%2)
+			j /= 2
+			f *= .5
+		}
+
+		return x
+	}
+
+	for i := 0; i < numSets; i++ {
+		for j := 0; j < numSamples; j++ {
+			x := float64(j) / float64(numSamples)
+			y := phi(j)
+
+			*samples = append(*samples, *math.NewVector(x, y, 0.))
+		}
+	}
+}
