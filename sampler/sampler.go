@@ -99,8 +99,10 @@ func (s *Sampler) setJump() {
 }
 
 func shuffleX(numSamples, numSets int, samples *[]math.Vector) {
+	rand.Seed(time.Now().UnixNano())
+
 	for i := 0; i < numSets; i++ {
-		for j := 0; i < numSamples-1; j++ {
+		for j := 0; j < numSamples-1; j++ {
 			index := rand.Int()%numSamples + i*numSamples
 			value := (*samples)[j+i*numSamples+1].X
 			(*samples)[j+i*numSamples+1].X = (*samples)[index].X
@@ -110,8 +112,10 @@ func shuffleX(numSamples, numSets int, samples *[]math.Vector) {
 }
 
 func shuffleY(numSamples, numSets int, samples *[]math.Vector) {
+	rand.Seed(time.Now().UnixNano())
+
 	for i := 0; i < numSets; i++ {
-		for j := 0; i < numSamples-1; j++ {
+		for j := 0; j < numSamples-1; j++ {
 			index := rand.Int()%numSamples + i*numSamples
 			value := (*samples)[j+i*numSamples+1].Y
 			(*samples)[j+i*numSamples+1].Y = (*samples)[index].Y

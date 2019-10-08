@@ -57,3 +57,17 @@ func Hammersley(numSamples, numSets int, samples *[]math.Vector) {
 		}
 	}
 }
+
+func NRooks(numSamples, numSets int, samples *[]math.Vector) {
+	for i := 0; i < numSets; i++ {
+		for j := 0; j < numSamples; j++ {
+			x := (float64(j) + rand.Float64()) / float64(numSamples)
+			y := (float64(j) + rand.Float64()) / float64(numSamples)
+
+			*samples = append(*samples, *math.NewVector(x, y, .0))
+		}
+	}
+
+	shuffleX(numSamples, numSets, samples)
+	shuffleY(numSamples, numSets, samples)
+}
