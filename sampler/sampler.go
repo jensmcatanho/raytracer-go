@@ -22,13 +22,13 @@ type Sampler struct {
 }
 
 func NewSampler(args ...interface{}) (*Sampler, error) {
-	Samples, Sets, err := samplerParams(args)
+	samples, sets, method, err := samplerParams(args)
 
 	sampler := &Sampler{
-		Samples:         Samples,
-		Sets:            Sets,
-		method:          Regular,
-		shuffledIndices: rand.Perm(Samples),
+		Samples:         samples,
+		Sets:            sets,
+		method:          method,
+		shuffledIndices: rand.Perm(samples),
 		count:           0,
 		jump:            0,
 	}
@@ -36,11 +36,11 @@ func NewSampler(args ...interface{}) (*Sampler, error) {
 	return sampler, err
 }
 
-func samplerParams(args []interface{}) (Samples, Sets int, err error) {
-	Samples = 1
-	Sets = 1
+func samplerParams(args []interface{}) (samples, sets int, method func(int, int, *[]math.Vector), err error) {
+	samples = 1
+	sets = 1
 
-	if len(args) > 2 {
+	if len(args) > 3 {
 		err = fmt.Errorf("Invalid number of arguments: %d arguments received", len(args))
 		return
 	}
@@ -54,7 +54,7 @@ func samplerParams(args []interface{}) (Samples, Sets int, err error) {
 				return
 			}
 
-			Samples = param
+			samples = param
 
 		case 1:
 			param, ok := paramInterface.(int)
@@ -63,7 +63,16 @@ func samplerParams(args []interface{}) (Samples, Sets int, err error) {
 				return
 			}
 
-			Sets = param
+			sets = param
+
+		case 2:
+			param, ok := paramInterface.(func(int, int, *[]math.Vector))
+			if !ok {
+				err = errors.New("2nd parameter is not of type int")
+				return
+			}
+
+			method = param
 		}
 	}
 	return
@@ -77,7 +86,7 @@ func (s *Sampler) SampleUnitSquare() math.Vector {
 	s.setJump()
 
 	sample := s.samples[s.jump+s.shuffledIndices[s.jump+s.count%s.Samples]]
-	s.count = s.count + 1
+	s.count++
 
 	return sample
 }
@@ -103,6 +112,4 @@ func Regular(numSamples, numSets int, samples *[]math.Vector) {
 			}
 		}
 	}
-
-	fmt.Println(samples)
 }
