@@ -113,3 +113,13 @@ func Regular(numSamples, numSets int, samples *[]math.Vector) {
 		}
 	}
 }
+
+func Random(numSamples, numSets int, samples *[]math.Vector) {
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < numSets; i++ {
+		for j := 0; j < numSamples; j++ {
+			*samples = append(*samples, *math.NewVector(rand.Float64(), rand.Float64(), .0))
+		}
+	}
+}
