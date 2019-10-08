@@ -97,3 +97,25 @@ func (s *Sampler) setJump() {
 		s.jump = (rand.Int() % s.Sets) * s.Samples
 	}
 }
+
+func shuffleX(numSamples, numSets int, samples *[]math.Vector) {
+	for i := 0; i < numSets; i++ {
+		for j := 0; i < numSamples-1; j++ {
+			index := rand.Int()%numSamples + i*numSamples
+			value := (*samples)[j+i*numSamples+1].X
+			(*samples)[j+i*numSamples+1].X = (*samples)[index].X
+			(*samples)[index].X = value
+		}
+	}
+}
+
+func shuffleY(numSamples, numSets int, samples *[]math.Vector) {
+	for i := 0; i < numSets; i++ {
+		for j := 0; i < numSamples-1; j++ {
+			index := rand.Int()%numSamples + i*numSamples
+			value := (*samples)[j+i*numSamples+1].Y
+			(*samples)[j+i*numSamples+1].Y = (*samples)[index].Y
+			(*samples)[index].Y = value
+		}
+	}
+}
