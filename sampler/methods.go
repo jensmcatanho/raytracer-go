@@ -8,13 +8,13 @@ import (
 )
 
 func Regular(numSamples, numSets int, samples *[]math.Vector) {
-	n := int(stdMath.Sqrt(float64(numSamples)))
+	n := stdMath.Sqrt(float64(numSamples))
 
 	for i := 0; i < numSets; i++ {
-		for j := 0; j < n; j++ {
-			for k := 0; k < n; k++ {
-				x := (float64(k) + 0.5) / float64(n)
-				y := (float64(j) + 0.5) / float64(n)
+		for j := 0; j < int(n); j++ {
+			for k := 0; k < int(n); k++ {
+				x := (float64(k) + 0.5) / n
+				y := (float64(j) + 0.5) / n
 
 				*samples = append(*samples, *math.NewVector(float64(x), float64(y), 0.))
 			}
