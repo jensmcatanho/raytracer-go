@@ -71,3 +71,18 @@ func NRooks(numSamples, numSets int, samples *[]math.Vector) {
 	shuffleX(numSamples, numSets, samples)
 	shuffleY(numSamples, numSets, samples)
 }
+
+func Jittered(numSamples, numSets int, samples *[]math.Vector) {
+	n := stdMath.Sqrt(float64(numSamples))
+
+	for i := 0; i < numSets; i++ {
+		for j := 0; float64(j) < n; j++ {
+			for k := 0; float64(k) < n; k++ {
+				x := (float64(k) + rand.Float64()) / n
+				y := (float64(j) + rand.Float64()) / n
+
+				*samples = append(*samples, *math.NewVector(x, y, .0))
+			}
+		}
+	}
+}
