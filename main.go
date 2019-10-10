@@ -22,6 +22,12 @@ func main() {
 	sphere.Color = *color.NewColor(1., 0., 0.)
 	scene.GetInstance().AddObject(sphere)
 
+	planePoint := geometry.NewVector(0., -8., 10.)
+	planeNormal := geometry.NewVector(0., 1., 0.)
+	plane := geometry.NewPlane(*planePoint, *planeNormal)
+	plane.Color = *color.NewColor(0., 1., 0.)
+	scene.GetInstance().AddObject(plane)
+
 	projectionPlane, err := camera.NewProjectionPlane(1000, 1000, 1., 100.)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error on projection plane creation: %s", err))
