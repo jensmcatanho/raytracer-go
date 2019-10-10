@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"image"
-	"jensmcatanho/raytracer-go/math"
+	"jensmcatanho/raytracer-go/math/color"
 )
 
 // ProjectionPlane is the structure of a plane in which the 3D scene is projected onto
@@ -16,7 +16,7 @@ type ProjectionPlane struct {
 	Gamma     float64
 
 	ClampOutOfGamut bool
-	ClampColor      math.Color
+	ClampColor      color.Color
 
 	Image image.RGBA
 }
@@ -32,7 +32,7 @@ func NewProjectionPlane(args ...interface{}) (*ProjectionPlane, error) {
 		Distance:        distance,
 		Gamma:           1.0,
 		ClampOutOfGamut: false,
-		ClampColor:      *math.NewColor(0., 0., 0.),
+		ClampColor:      *color.NewColor(0., 0., 0.),
 		Image:           *image.NewRGBA(image.Rect(0, 0, width, height)),
 	}
 
@@ -92,7 +92,7 @@ func projectionPlaneParams(args []interface{}) (width, height int, pixelSize, di
 }
 
 // SetPixel sets a color to a pixel in the projection plane
-func (p *ProjectionPlane) SetPixel(row, col int, rawColor math.Color) {
+func (p *ProjectionPlane) SetPixel(row, col int, rawColor color.Color) {
 	mappedColor := rawColor
 
 	if p.ClampOutOfGamut {

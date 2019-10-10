@@ -1,13 +1,14 @@
-package math
+package geometry
 
 import (
+	"jensmcatanho/raytracer-go/math/color"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_NewSurface_WhenANewSurfaceIsCreated(t *testing.T) {
-	color := NewColor(1., 1., 1.)
+	color := color.NewColor(1., 1., 1.)
 	hit := true
 	hitPoint := NewVector(0., 0., 0.)
 	normal := NewVector(0., 1., 0.)
@@ -21,7 +22,7 @@ func Test_NewSurface_WhenANewSurfaceIsCreated(t *testing.T) {
 }
 
 func Test_NewSurface_WhenNoSurfaceWasHit(t *testing.T) {
-	color := NewColor(1., 1., 1.)
+	color := color.NewColor(1., 1., 1.)
 	hit := false
 	hitPoint := NewVector(0., 0., 0.)
 	normal := NewVector(0., 1., 0.)

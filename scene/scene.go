@@ -3,8 +3,8 @@ package scene
 import (
 	"errors"
 	"fmt"
-	"jensmcatanho/raytracer-go/math"
-	"jensmcatanho/raytracer-go/object"
+	"jensmcatanho/raytracer-go/math/color"
+	"jensmcatanho/raytracer-go/math/geometry"
 	"sync"
 )
 
@@ -15,13 +15,13 @@ var (
 
 type Scene interface {
 	Initialize(args ...interface{}) error
-	AddObject(obj object.Renderable)
-	ObjectList() []object.Renderable
+	AddObject(obj geometry.Renderable)
+	ObjectList() []geometry.Renderable
 }
 
 type sceneImpl struct {
-	backgroundColor math.Color
-	objects         []object.Renderable
+	backgroundColor color.Color
+	objects         []geometry.Renderable
 }
 
 func GetInstance() Scene {
@@ -34,7 +34,7 @@ func GetInstance() Scene {
 
 func (s *sceneImpl) Initialize(args ...interface{}) error {
 	backgroundColor, numObjects, err := sceneParams(args)
-	objects := make([]object.Renderable, numObjects)
+	objects := make([]geometry.Renderable, numObjects)
 
 	s.backgroundColor = backgroundColor
 	s.objects = objects
@@ -42,8 +42,8 @@ func (s *sceneImpl) Initialize(args ...interface{}) error {
 	return err
 }
 
-func sceneParams(args []interface{}) (backgroundColor math.Color, numObjects int, err error) {
-	backgroundColor = *math.NewColor(0., 0., 0.)
+func sceneParams(args []interface{}) (backgroundColor color.Color, numObjects int, err error) {
+	backgroundColor = *color.NewColor(0., 0., 0.)
 	numObjects = 0
 
 	if len(args) > 2 {
@@ -54,9 +54,9 @@ func sceneParams(args []interface{}) (backgroundColor math.Color, numObjects int
 	for i, paramInterface := range args {
 		switch i {
 		case 0:
-			param, ok := paramInterface.(math.Color)
+			param, ok := paramInterface.(color.Color)
 			if !ok {
-				err = errors.New("1st parameter is not of type math.Color")
+				err = errors.New("1st parameter is not of type color.Color")
 				return
 			}
 
@@ -75,10 +75,10 @@ func sceneParams(args []interface{}) (backgroundColor math.Color, numObjects int
 	return
 }
 
-func (s *sceneImpl) AddObject(obj object.Renderable) {
+func (s *sceneImpl) AddObject(obj geometry.Renderable) {
 	s.objects = append(s.objects, obj)
 }
 
-func (s *sceneImpl) ObjectList() []object.Renderable {
+func (s *sceneImpl) ObjectList() []geometry.Renderable {
 	return s.objects
 }

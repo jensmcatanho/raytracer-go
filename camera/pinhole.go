@@ -2,8 +2,9 @@ package camera
 
 import (
 	"image/png"
-	"jensmcatanho/raytracer-go/math"
-	"jensmcatanho/raytracer-go/sampler"
+	"jensmcatanho/raytracer-go/math/color"
+	"jensmcatanho/raytracer-go/math/geometry"
+	"jensmcatanho/raytracer-go/math/sampler"
 	"jensmcatanho/raytracer-go/tracer"
 	"log"
 	"os"
@@ -11,12 +12,12 @@ import (
 
 // Pinhole is a camera that renders a scene with a perspective projection
 type Pinhole struct {
-	Eye    *math.Vector
-	LookAt *math.Vector
+	Eye    *geometry.Vector
+	LookAt *geometry.Vector
 
-	u *math.Vector
-	v *math.Vector
-	w *math.Vector
+	u *geometry.Vector
+	v *geometry.Vector
+	w *geometry.Vector
 
 	Yaw   float64
 	Pitch float64
@@ -32,18 +33,18 @@ type Pinhole struct {
 
 // RenderScene traces a ray for every pixel in the target image and sets the pixel color with the color of the object hit
 func (p *Pinhole) RenderScene() {
-	ray := new(math.Ray)
+	ray := new(geometry.Ray)
 	ray.Origin = *p.Eye
 	pixelSize := p.ProjectionPlane.PixelSize / p.Zoom
 	p.ComputeUVW()
 
 	for row := 0; row < p.ProjectionPlane.Height; row++ {
 		for col := 0; col < p.ProjectionPlane.Width; col++ {
-			pixelColor := *math.NewColor(0., 0., 0.)
+			pixelColor := *color.NewColor(0., 0., 0.)
 
 			for sample := 0; sample < p.Sampler.Samples; sample++ {
 				samplePoint := p.Sampler.SampleUnitSquare()
-				ray.Direction = p.RayDirection(*math.NewVector(
+				ray.Direction = p.RayDirection(*geometry.NewVector(
 					pixelSize*(float64(col)-0.5*float64(p.ProjectionPlane.Width)+samplePoint.X),
 					pixelSize*(float64(row)-0.5*float64(p.ProjectionPlane.Height)+samplePoint.Y),
 					0.,
@@ -65,15 +66,15 @@ func (p *Pinhole) RenderScene() {
 func (p *Pinhole) ComputeUVW() {
 	if p.Eye.X == p.LookAt.X && p.Eye.Z == p.LookAt.Z && p.Eye.Y > p.LookAt.Y {
 		// Looking down
-		p.u = math.NewVector(0., 0., 1.)
-		p.v = math.NewVector(1., 0., 0.)
-		p.w = math.NewVector(0., 1., 0.)
+		p.u = geometry.NewVector(0., 0., 1.)
+		p.v = geometry.NewVector(1., 0., 0.)
+		p.w = geometry.NewVector(0., 1., 0.)
 		return
 	} else if p.Eye.X == p.LookAt.X && p.Eye.Z == p.LookAt.Z && p.Eye.Y < p.LookAt.Y {
 		// Looking up
-		p.u = math.NewVector(1., 0., 0.)
-		p.v = math.NewVector(0., 0., 1.)
-		p.w = math.NewVector(0., -1., 0.)
+		p.u = geometry.NewVector(1., 0., 0.)
+		p.v = geometry.NewVector(0., 0., 1.)
+		p.w = geometry.NewVector(0., -1., 0.)
 		return
 	}
 
@@ -87,7 +88,7 @@ func (p *Pinhole) ComputeUVW() {
 }
 
 // RayDirection returns the direction of a ray given a sample point on the projection plane
-func (p *Pinhole) RayDirection(samplePoint math.Vector) math.Vector {
+func (p *Pinhole) RayDirection(samplePoint geometry.Vector) geometry.Vector {
 	direction := p.u.Multiply(samplePoint.X)
 	direction = direction.Add(p.v.Multiply(samplePoint.Y))
 	direction = direction.Sub(p.w.Multiply(p.ProjectionPlane.Distance))

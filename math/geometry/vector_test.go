@@ -1,14 +1,10 @@
-package math
+package geometry
 
 import (
 	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-)
-
-var (
-	epsilon = 0.001
 )
 
 func Test_NewVector_WhenANewVectorIsCreated(t *testing.T) {
@@ -91,6 +87,7 @@ func Test_Dot(t *testing.T) {
 
 func Test_Length(t *testing.T) {
 	v := NewVector(1., 1., 1.)
+	epsilon := 0.001
 
 	length := v.Length()
 
@@ -99,6 +96,7 @@ func Test_Length(t *testing.T) {
 
 func Test_Normalize(t *testing.T) {
 	v := NewVector(math.Sqrt(3), math.Sqrt(3), math.Sqrt(3))
+	epsilon := 0.001
 
 	v.Normalize()
 

@@ -1,23 +1,19 @@
-package object
+package geometry
 
 import (
-	"jensmcatanho/raytracer-go/math"
-	stdMath "math"
-)
-
-const (
-	epsilon = 0.01
+	"jensmcatanho/raytracer-go/math/color"
+	"math"
 )
 
 // Sphere is a structure that represents a 3D sphere
 type Sphere struct {
-	Center math.Vector
+	Center Vector
 	Radius float64
-	Color  math.Color
+	Color  color.Color
 }
 
 // NewSphere creates a Sphere structure
-func NewSphere(center math.Vector, radius float64) *Sphere {
+func NewSphere(center Vector, radius float64) *Sphere {
 	return &Sphere{
 		Center: center,
 		Radius: radius,
@@ -25,7 +21,7 @@ func NewSphere(center math.Vector, radius float64) *Sphere {
 }
 
 // Hit checks if a ray hits the sphere and returns the surface hit
-func (s *Sphere) Hit(ray math.Ray, closestDistance *float64) *math.Surface {
+func (s *Sphere) Hit(ray Ray, closestDistance *float64) *Surface {
 	originToCenter := ray.Origin.Sub(&s.Center)
 
 	a := ray.Direction.Dot(&ray.Direction)
@@ -34,32 +30,32 @@ func (s *Sphere) Hit(ray math.Ray, closestDistance *float64) *math.Surface {
 	discriminant := b*b - (4 * a * c)
 
 	if discriminant < 0. {
-		return &math.Surface{
+		return &Surface{
 			Hit: false,
 		}
 	}
 
-	distance := (-b - stdMath.Sqrt(discriminant)) / 2 * a
+	distance := (-b - math.Sqrt(discriminant)) / 2 * a
 	if distance > epsilon {
 		*closestDistance = distance
 		return s.hitSurface(ray, distance, originToCenter)
 	}
 
-	distance = (-b + stdMath.Sqrt(discriminant)) / 2 * a
+	distance = (-b + math.Sqrt(discriminant)) / 2 * a
 	if distance > epsilon {
 		*closestDistance = distance
 		return s.hitSurface(ray, distance, originToCenter)
 	}
 
-	return &math.Surface{
+	return &Surface{
 		Hit: false,
 	}
 }
 
-func (s *Sphere) hitSurface(ray math.Ray, distance float64, originToCenter *math.Vector) *math.Surface {
+func (s *Sphere) hitSurface(ray Ray, distance float64, originToCenter *Vector) *Surface {
 	hitPoint := ray.Origin.Add(ray.Direction.Multiply(distance))
 	normal := originToCenter.Add(ray.Direction.Multiply(distance))
 	normal = normal.Multiply(1. / s.Radius)
 
-	return math.NewSurface(s.Color, true, *hitPoint, *normal)
+	return NewSurface(s.Color, true, *hitPoint, *normal)
 }

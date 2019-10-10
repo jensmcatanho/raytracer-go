@@ -1,8 +1,8 @@
-package math
+package color
 
 import (
 	"image/color"
-	stdMath "math"
+	"math"
 )
 
 // Color is a structure that represents an RGB color
@@ -39,9 +39,9 @@ func (c *Color) Multiply(k float64) *Color {
 
 func (c *Color) Pow(k float64) *Color {
 	return &Color{
-		r: stdMath.Pow(c.r, k),
-		g: stdMath.Pow(c.g, k),
-		b: stdMath.Pow(c.b, k),
+		r: math.Pow(c.r, k),
+		g: math.Pow(c.g, k),
+		b: math.Pow(c.b, k),
 	}
 }
 
@@ -54,7 +54,7 @@ func (c *Color) ClampToColor(target Color) {
 }
 
 func (c *Color) MaxToOne() {
-	max := stdMath.Max(c.r, stdMath.Max(c.b, c.g))
+	max := math.Max(c.r, math.Max(c.b, c.g))
 
 	if max > 1.0 {
 		c.r /= max

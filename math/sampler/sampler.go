@@ -3,7 +3,7 @@ package sampler
 import (
 	"errors"
 	"fmt"
-	"jensmcatanho/raytracer-go/math"
+	"jensmcatanho/raytracer-go/math/geometry"
 	"math/rand"
 	"time"
 )
@@ -12,8 +12,8 @@ type Sampler struct {
 	Samples int
 	Sets    int
 
-	method          func(int, int, *[]math.Vector)
-	samples         []math.Vector
+	method          func(int, int, *[]geometry.Vector)
+	samples         []geometry.Vector
 	shuffledIndices []int
 
 	count int
@@ -35,7 +35,7 @@ func NewSampler(args ...interface{}) (*Sampler, error) {
 	return sampler, err
 }
 
-func samplerParams(args []interface{}) (samples, sets int, method func(int, int, *[]math.Vector), err error) {
+func samplerParams(args []interface{}) (samples, sets int, method func(int, int, *[]geometry.Vector), err error) {
 	samples = 1
 	sets = 1
 
@@ -65,7 +65,7 @@ func samplerParams(args []interface{}) (samples, sets int, method func(int, int,
 			sets = param
 
 		case 2:
-			param, ok := paramInterface.(func(int, int, *[]math.Vector))
+			param, ok := paramInterface.(func(int, int, *[]geometry.Vector))
 			if !ok {
 				err = errors.New("2nd parameter is not of type int")
 				return
@@ -81,7 +81,7 @@ func (s *Sampler) Sample() {
 	s.method(s.Samples, s.Sets, &s.samples)
 }
 
-func (s *Sampler) SampleUnitSquare() math.Vector {
+func (s *Sampler) SampleUnitSquare() geometry.Vector {
 	s.setJump()
 
 	sample := s.samples[s.jump+s.shuffledIndices[s.jump+s.count%s.Samples]]
@@ -98,7 +98,7 @@ func (s *Sampler) setJump() {
 	}
 }
 
-func shuffleX(numSamples, numSets int, samples *[]math.Vector) {
+func shuffleX(numSamples, numSets int, samples *[]geometry.Vector) {
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < numSets; i++ {
@@ -111,7 +111,7 @@ func shuffleX(numSamples, numSets int, samples *[]math.Vector) {
 	}
 }
 
-func shuffleY(numSamples, numSets int, samples *[]math.Vector) {
+func shuffleY(numSamples, numSets int, samples *[]geometry.Vector) {
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < numSets; i++ {

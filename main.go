@@ -3,23 +3,23 @@ package main
 import (
 	"fmt"
 	"jensmcatanho/raytracer-go/camera"
-	"jensmcatanho/raytracer-go/math"
-	"jensmcatanho/raytracer-go/object"
-	"jensmcatanho/raytracer-go/sampler"
+	"jensmcatanho/raytracer-go/math/color"
+	"jensmcatanho/raytracer-go/math/geometry"
+	"jensmcatanho/raytracer-go/math/sampler"
 	"jensmcatanho/raytracer-go/scene"
 	"jensmcatanho/raytracer-go/tracer"
 )
 
 func main() {
-	backgroundColor := math.NewColor(0., 0., 0.)
+	backgroundColor := color.NewColor(0., 0., 0.)
 	err := scene.GetInstance().Initialize(*backgroundColor)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error on scene initializing: %s", err))
 	}
 
-	sphereCenter := math.NewVector(0., 0., 10.)
-	sphere := object.NewSphere(*sphereCenter, 8)
-	sphere.Color = *math.NewColor(1., 0., 0.)
+	sphereCenter := geometry.NewVector(0., 0., 10.)
+	sphere := geometry.NewSphere(*sphereCenter, 8)
+	sphere.Color = *color.NewColor(1., 0., 0.)
 	scene.GetInstance().AddObject(sphere)
 
 	projectionPlane, err := camera.NewProjectionPlane(1000, 1000, 1., 100.)
@@ -36,8 +36,8 @@ func main() {
 	camera := new(camera.Pinhole)
 	camera.ProjectionPlane = *projectionPlane
 	camera.Sampler = *sampler
-	camera.Eye = math.NewVector(.0, .0, .0)
-	camera.LookAt = math.NewVector(.0, .0, 1.)
+	camera.Eye = geometry.NewVector(.0, .0, .0)
+	camera.LookAt = geometry.NewVector(.0, .0, 1.)
 	camera.Exposure = 1
 	camera.Zoom = 1
 	camera.Tracer = new(tracer.RayCast)

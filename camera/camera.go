@@ -1,14 +1,14 @@
 package camera
 
-import "jensmcatanho/raytracer-go/math"
+import "jensmcatanho/raytracer-go/math/geometry"
 
 var (
-	worldUp = math.NewVector(0., 1., 0.)
+	worldUp = geometry.NewVector(0., 1., 0.)
 )
 
 // Camera is an interface for structures that can render a scene
 type Camera interface {
 	RenderScene()
-	RayDirection(samplePoint math.Vector) math.Vector
+	RayDirection(samplePoint geometry.Vector) geometry.Vector
 	SaveImage()
 }

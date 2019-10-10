@@ -1,7 +1,7 @@
-package math
+package geometry
 
 import (
-	stdMath "math"
+	"math"
 )
 
 // Vector is a structure that represents a 3D vector
@@ -52,7 +52,7 @@ func (v *Vector) Dot(w *Vector) float64 {
 
 // Length returns the length of the Vector
 func (v *Vector) Length() float64 {
-	return stdMath.Sqrt(stdMath.Pow(v.X, 2) + stdMath.Pow(v.Y, 2) + stdMath.Pow(v.Z, 2))
+	return math.Sqrt(math.Pow(v.X, 2) + math.Pow(v.Y, 2) + math.Pow(v.Z, 2))
 }
 
 // Normalize normalizes the Vector

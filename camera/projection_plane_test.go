@@ -2,8 +2,8 @@ package camera
 
 import (
 	"fmt"
-	"image/color"
-	"jensmcatanho/raytracer-go/math"
+	imageColor "image/color"
+	"jensmcatanho/raytracer-go/math/color"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,7 +18,7 @@ func Test_NewProjectionPlane_WhenMinimumParamsArePassed(t *testing.T) {
 	assert.Equal(t, 500., projectionPlane.Distance)
 	assert.Equal(t, 1., projectionPlane.Gamma)
 	assert.Equal(t, false, projectionPlane.ClampOutOfGamut)
-	assert.Equal(t, *math.NewColor(0., 0., 0.), projectionPlane.ClampColor)
+	assert.Equal(t, *color.NewColor(0., 0., 0.), projectionPlane.ClampColor)
 }
 
 func Test_NewProjectionPlane_WhenPixelSizeIsPassed(t *testing.T) {
@@ -30,7 +30,7 @@ func Test_NewProjectionPlane_WhenPixelSizeIsPassed(t *testing.T) {
 	assert.Equal(t, 500., projectionPlane.Distance)
 	assert.Equal(t, 1., projectionPlane.Gamma)
 	assert.Equal(t, false, projectionPlane.ClampOutOfGamut)
-	assert.Equal(t, *math.NewColor(0., 0., 0.), projectionPlane.ClampColor)
+	assert.Equal(t, *color.NewColor(0., 0., 0.), projectionPlane.ClampColor)
 }
 
 func Test_NewProjectionPlane_WhenDistanceIsPassed(t *testing.T) {
@@ -42,7 +42,7 @@ func Test_NewProjectionPlane_WhenDistanceIsPassed(t *testing.T) {
 	assert.Equal(t, 10., projectionPlane.Distance)
 	assert.Equal(t, 1., projectionPlane.Gamma)
 	assert.Equal(t, false, projectionPlane.ClampOutOfGamut)
-	assert.Equal(t, *math.NewColor(0., 0., 0.), projectionPlane.ClampColor)
+	assert.Equal(t, *color.NewColor(0., 0., 0.), projectionPlane.ClampColor)
 }
 
 func Test_NewProjectionPlane_WhenRequiredParamsAreMissing(t *testing.T) {
@@ -54,7 +54,7 @@ func Test_NewProjectionPlane_WhenRequiredParamsAreMissing(t *testing.T) {
 	assert.Equal(t, 500., projectionPlane.Distance)
 	assert.Equal(t, 1., projectionPlane.Gamma)
 	assert.Equal(t, false, projectionPlane.ClampOutOfGamut)
-	assert.Equal(t, *math.NewColor(0., 0., 0.), projectionPlane.ClampColor)
+	assert.Equal(t, *color.NewColor(0., 0., 0.), projectionPlane.ClampColor)
 }
 
 func Test_NewProjectionPlane_WhenNoParamsAreReceived(t *testing.T) {
@@ -66,7 +66,7 @@ func Test_NewProjectionPlane_WhenNoParamsAreReceived(t *testing.T) {
 	assert.Equal(t, 500., projectionPlane.Distance)
 	assert.Equal(t, 1., projectionPlane.Gamma)
 	assert.Equal(t, false, projectionPlane.ClampOutOfGamut)
-	assert.Equal(t, *math.NewColor(0., 0., 0.), projectionPlane.ClampColor)
+	assert.Equal(t, *color.NewColor(0., 0., 0.), projectionPlane.ClampColor)
 }
 
 func Test_NewProjectionPlane_WhenListOfParamsIsExceeded(t *testing.T) {
@@ -78,7 +78,7 @@ func Test_NewProjectionPlane_WhenListOfParamsIsExceeded(t *testing.T) {
 	assert.Equal(t, 500., projectionPlane.Distance)
 	assert.Equal(t, 1., projectionPlane.Gamma)
 	assert.Equal(t, false, projectionPlane.ClampOutOfGamut)
-	assert.Equal(t, *math.NewColor(0., 0., 0.), projectionPlane.ClampColor)
+	assert.Equal(t, *color.NewColor(0., 0., 0.), projectionPlane.ClampColor)
 }
 
 func Test_ProjectionPlane_SetPixelWhenColorOverflowsAndOutOfGamutIsSet(t *testing.T) {
@@ -87,24 +87,24 @@ func Test_ProjectionPlane_SetPixelWhenColorOverflowsAndOutOfGamutIsSet(t *testin
 
 	projectionPlane.ClampOutOfGamut = true
 
-	projectionPlane.SetPixel(5, 5, *math.NewColor(2., .5, .5))
-	assert.Equal(t, color.RGBA{0, 0, 0, 255}, projectionPlane.Image.At(5, 5))
+	projectionPlane.SetPixel(5, 5, *color.NewColor(2., .5, .5))
+	assert.Equal(t, imageColor.RGBA{0, 0, 0, 255}, projectionPlane.Image.At(5, 5))
 }
 
 func Test_ProjectionPlane_SetPixelWhenColorOverflowsAndOutOfGamutIsNotSet(t *testing.T) {
 	projectionPlane, err := NewProjectionPlane(200, 200, 1., 10.)
 	assert.Nil(t, err)
 
-	projectionPlane.SetPixel(5, 5, *math.NewColor(2., .5, .5))
-	assert.Equal(t, color.RGBA{255, 63, 63, 255}, projectionPlane.Image.At(5, 5))
+	projectionPlane.SetPixel(5, 5, *color.NewColor(2., .5, .5))
+	assert.Equal(t, imageColor.RGBA{255, 63, 63, 255}, projectionPlane.Image.At(5, 5))
 }
 
 func Test_ProjectionPlane_SetPixelWhenColorDoesNotOverflow(t *testing.T) {
 	projectionPlane, err := NewProjectionPlane(200, 200, 1., 10.)
 	assert.Nil(t, err)
 
-	projectionPlane.SetPixel(5, 5, *math.NewColor(1., .5, .5))
-	assert.Equal(t, color.RGBA{255, 127, 127, 255}, projectionPlane.Image.At(5, 5))
+	projectionPlane.SetPixel(5, 5, *color.NewColor(1., .5, .5))
+	assert.Equal(t, imageColor.RGBA{255, 127, 127, 255}, projectionPlane.Image.At(5, 5))
 }
 
 func Test_ProjectionPlane_SetPixelWhenGammaIsDifferentFromOne(t *testing.T) {
@@ -113,6 +113,6 @@ func Test_ProjectionPlane_SetPixelWhenGammaIsDifferentFromOne(t *testing.T) {
 
 	projectionPlane.Gamma = .5
 
-	projectionPlane.SetPixel(5, 5, *math.NewColor(1., .5, .5))
-	assert.Equal(t, color.RGBA{255, 63, 63, 255}, projectionPlane.Image.At(5, 5))
+	projectionPlane.SetPixel(5, 5, *color.NewColor(1., .5, .5))
+	assert.Equal(t, imageColor.RGBA{255, 63, 63, 255}, projectionPlane.Image.At(5, 5))
 }

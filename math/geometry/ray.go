@@ -1,4 +1,4 @@
-package math
+package geometry
 
 // Ray is a structure that represent an infinite straight line
 type Ray struct {
